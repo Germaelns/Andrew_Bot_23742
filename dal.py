@@ -3,7 +3,7 @@ import requests
 access_token = "1a36c8564ba171614dcf"
 
 
-class BotController:
+class BotDatabaseController:
     @staticmethod
     def save_deeplinks(image: str, title: str, url: str):
         pass
