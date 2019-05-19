@@ -12,12 +12,12 @@ bot = telebot.TeleBot(TELEGRAM_TOKEN)
 
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message):
-    bot.register_next_step_handler(bot.send_message(message.from_user.id, "Введите свой пароль или exit для выхода"), get_password)
+    bot.register_next_step_handler(bot.send_message(message.from_user.id, "Введите пароль или exit для выхода"), get_password)
 
 
 def get_password(message):
     if message.text == "Password56734518":
-        bot.register_next_step_handler(bot.send_message(message.from_user.id, "Введите цифру в соответствии с необходимой операцией:\n1) Запустить постинг на канал\n2) Запустить парсинг ВК\n3) Добавить группу\n4)Удалить группу\n5) Изменить промежутки времени постинга\n6) Изменить частоту постинга\n7) Выйти"), interface)
+        bot.register_next_step_handler(bot.send_message(message.from_user.id, "Введите цифру в соответствии с необходимой операцией:\n1) Запустить постинг на канал\n2) Запустить парсинг ВК\n3) Добавить группу\n4) Удалить группу\n5) Изменить промежутки времени постинга\n6) Изменить частоту постинга\n7) Выйти \n8) Выключить бота"), interface)
     elif message.text == "exit":
         bot.send_message(message.from_user.id, "Прощайте, спасибо что обратились!")
     else:
@@ -26,11 +26,21 @@ def get_password(message):
 
 def interface(message):
     if message.text == '1':
-        post()
-        bot.send_message(message.from_user.id, "Бот начнёт постинг на канал после первого парсинга ВК!")
+        try:
+            post()
+            bot.send_message(message.from_user.id, "Бот начнёт постинг на канал после первого парсинга ВК!")
+        except Exception as e:
+            print(e)
+            bot.send_message(message.from_user.id, "Упс, возникла ошибка")
+
     elif message.text == '2':
-        update()
-        bot.send_message(message.from_user.id, "Бот начал парсинг и работает!")
+        try:
+            update()
+            bot.send_message(message.from_user.id, "Бот начал парсинг и работает!")
+        except Exception as e:
+            print(e)
+            bot.send_message(message.from_user.id, "Упс, возникла ошибка")
+
     elif message.text == '3':
         bot.register_next_step_handler(bot.send_message(message.from_user.id, "Введите ID группы вконтакте С МИНУСОМ\n Пример: (-8562496)"), interface_add_group)
     elif message.text == '4':
@@ -38,54 +48,86 @@ def interface(message):
     elif message.text == '5':
         bot.register_next_step_handler(bot.send_message(message.from_user.id, "Введите начало и конец времени через двуеточие\n Например: 9:21"), interface_change_timing)
     elif message.text == '6':
-        bot.register_next_step_handler(bot.send_message(message.from_user.id, "Введите свой пароль или exit для выхода"), interface_delete_group)
+        bot.register_next_step_handler(bot.send_message(message.from_user.id, "Введите частоту загрузки постов цифрой в минутах (минимум 30 минут)"), interface_delete_group)
     elif message.text == '7':
         bot.send_message(message.from_user.id, "Прощайте, спасибо что обратились!")
+    elif message.text == '8':
+        bot.send_message(message.from_user.id, "Бот прекращает свою работу")
+        bot.stop_bot()
 
 
 def interface_add_group(message):
-    interface_engine = create_engine(POSTGRE_URI, pool_pre_ping=True)
+    try:
+        interface_engine = create_engine(POSTGRE_URI, pool_pre_ping=True)
 
-    interfaceSession = sessionmaker(bind=interface_engine)
-    interface_session = interfaceSession()
+        interfaceSession = sessionmaker(bind=interface_engine)
+        interface_session = interfaceSession()
 
-    BotDatabaseController.add_vk_group(interface_session, int(message.text))
+        BotDatabaseController.add_vk_group(interface_session, int(message.text))
 
-    interface_session.commit()
-    interface_session.close()
+        interface_session.commit()
+        interface_session.close()
 
-    bot.send_message(message.from_user.id, "Группа успешно добавлена!")
+        bot.send_message(message.from_user.id, "Группа успешно добавлена!")
+    except Exception as e:
+        print(e)
+        bot.send_message(message.from_user.id, "Упс, возникла ошибка")
 
 
 def interface_delete_group(message):
-    interface_engine = create_engine(POSTGRE_URI, pool_pre_ping=True)
+    try:
+        interface_engine = create_engine(POSTGRE_URI, pool_pre_ping=True)
 
-    interfaceSession = sessionmaker(bind=interface_engine)
-    interface_session = interfaceSession()
+        interfaceSession = sessionmaker(bind=interface_engine)
+        interface_session = interfaceSession()
 
-    BotDatabaseController.delete_vk_group(interface_session, int(message.text))
+        BotDatabaseController.delete_vk_group(interface_session, int(message.text))
 
-    interface_session.commit()
-    interface_session.close()
+        interface_session.commit()
+        interface_session.close()
 
-    bot.send_message(message.from_user.id, "Группа успешно удалена!")
+        bot.send_message(message.from_user.id, "Группа успешно удалена!")
+    except Exception as e:
+        print(e)
+        bot.send_message(message.from_user.id, "Упс, возникла ошибка")
 
 
 def interface_change_timing(message):
-    time = message.text.split(':')
-    interface_engine = create_engine(POSTGRE_URI, pool_pre_ping=True)
 
-    interfaceSession = sessionmaker(bind=interface_engine)
-    interface_session = interfaceSession()
+    try:
+        time = message.text.split(':')
+        interface_engine = create_engine(POSTGRE_URI, pool_pre_ping=True)
 
-    BotDatabaseController.change_post_timing(interface_session, time[0], time[1])
+        interfaceSession = sessionmaker(bind=interface_engine)
+        interface_session = interfaceSession()
 
-    interface_session.commit()
-    interface_session.close()
+        BotDatabaseController.change_post_timing(interface_session, time[0], time[1])
 
-    bot.send_message(message.from_user.id, "Время успешно изменено!")
+        interface_session.commit()
+        interface_session.close()
+
+        bot.send_message(message.from_user.id, "Время успешно изменено!")
+    except Exception as e:
+        print(e)
+        bot.send_message(message.from_user.id, "Упс, возникла ошибка")
 
 
+def interface_change_iter_time(message):
+    try:
+        interface_engine = create_engine(POSTGRE_URI, pool_pre_ping=True)
+
+        interfaceSession = sessionmaker(bind=interface_engine)
+        interface_session = interfaceSession()
+
+        BotDatabaseController.change_post_iter_time(interface_session, message.text)
+
+        interface_session.commit()
+        interface_session.close()
+
+        bot.send_message(message.from_user.id, "Время выхода постов успешно изменено!")
+    except Exception as e:
+        print(e)
+        bot.send_message(message.from_user.id, "Упс, возникла ошибка")
 
 
 def update():
