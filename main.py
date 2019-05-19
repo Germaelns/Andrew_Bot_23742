@@ -190,7 +190,7 @@ def post():
                 pass
 
         post_session.commit()
-        post_session.close()
+        post_session.remove()
 
         time.sleep(900 - (int(time.time())-int(post_iter_time)))
 
