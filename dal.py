@@ -5,7 +5,7 @@ import models
 class BotDatabaseController:
     @staticmethod
     def add_deeplink(session, image: str, title: str, url: str):
-        return session.add(models.Link(image= image, title= title, url= url))
+        return session.add(models.Link(image=image, title=title, url=url))
 
     @staticmethod
     def get_all_deeplinks(session) -> list:
@@ -16,24 +16,26 @@ class BotDatabaseController:
         return session.query(models.Link).filter(models.Link.url == url).delete()
 
     @staticmethod
-    def create_new_access_token(session):
-        headers = {
-             "content-type": "application/x-www-form-urlencoded",
-             "authorization": "Basic ZjhjZmIzOTg5NGM4OGE1YmQzMzcyMzllM2U5YmQyOjQ0ODkwYTlmMjBhZDQzYjc3MTc5Y2M5ODc2YWNjMA=="
-         }
+    def update_access_token(session, token: str):
+        return session.query(models.Variable).filter(models.Variable.description == "access_token").update(
+            {'value': token})
 
-        responce = requests.get('https://api.admitad.com/token?grant_type=client_credentials&client_id=f8cfb39894c88a5bd337239e3e9bd2&scope=deeplink_generator websites advcampaigns', headers=headers)
-        session.query(models.Variable).filter(models.Variable.description == "access_token").update({'value': responce.json()['access_token']})
-
-        return 0
+    @staticmethod
+    def update_refresh_token(session, refresh_token: str):
+        return session.query(models.Variable).filter(models.Variable.description == "refresh_token").update(
+            {'value': refresh_token})
 
     @staticmethod
     def get_access_token(session) -> str:
         return session.query(models.Variable).filter(models.Variable.description == "access_token").all()[0].value
 
     @staticmethod
-    def add_vk_group(session,group_id: int):
-        return session.add(models.Group(group_id= group_id))
+    def get_refresh_token(session) -> str:
+        return session.query(models.Variable).filter(models.Variable.description == "refresh_token").all()[0].value
+
+    @staticmethod
+    def add_vk_group(session, group_id: int):
+        return session.add(models.Group(group_id=group_id))
 
     @staticmethod
     def get_all_vk_groups(session) -> list:
@@ -57,6 +59,10 @@ class BotDatabaseController:
         return session.query(models.Variable).filter(models.Variable.description == "end_timer").all()[0].value
 
     @staticmethod
+    def get_last_post_time(session) -> str:
+        return session.query(models.Variable).filter(models.Variable.description == "last_post_time").all()[0].value
+
+    @staticmethod
     def change_last_post_time(session, time: str):
         session.query(models.Variable).filter(models.Variable.description == "last_post_time").update({'value': time})
 
@@ -66,7 +72,6 @@ class BotDatabaseController:
 
 
 if __name__ == "__main__":
-
     from sqlalchemy.orm import sessionmaker
     from sqlalchemy import create_engine
     from config import POSTGRE_URI
@@ -76,7 +81,7 @@ if __name__ == "__main__":
     Session = sessionmaker(bind=some_engine)
     session = Session()
 
-    BotDatabaseController.create_new_access_token(session)
+    # BotDatabaseController.create_new_access_token(session)
     # BotDatabaseController.get_access_token(session)
     # BotDatabaseController.add_vk_group(2376383, session)
     # BotDatabaseController.delete_vk_group(2376383, session)

@@ -1,4 +1,5 @@
 import datetime
+import sqlalchemy
 
 from bll import *
 
@@ -15,9 +16,10 @@ sleep_time = 900
 
 @bot.message_handler(commands=['start'])
 def main(message):
+    print("hello")
     while True:
 
-        some_engine = create_engine(POSTGRE_URI)
+        some_engine = create_engine(POSTGRE_URI, pool_pre_ping=True)
 
         Session = sessionmaker(bind=some_engine)
         session = Session()
@@ -31,20 +33,17 @@ def main(message):
 
         if start_time < hour < end_time:
 
-            urls = get_url_from_vk_group(vk_groups)
+            urls = get_url_from_vk_group(session, vk_groups)
 
             if not urls:
                 pass
             else:
                 for url in urls:
-                    try:
-                        info = get_info_from_url(url)
+                    info = get_info_from_url(url)
+                    if 'aliexpress.com' in info[2]:
                         deeplink = create_deeplink(session, info[2])
                         BotDatabaseController.add_deeplink(session, image=info[0][0], title=info[1][0], url=deeplink)
-                        # post_to_telegram(image=info[0][0], title=info[1][0], url=create_deeplinks(info[2]))
-                    except Exception as e:
-                        print(e)
-                        pass
+                    # post_to_telegram(image=info[0][0], title=info[1][0], url=create_deeplinks(info[2]))
 
         session.commit()
         session.close()
@@ -58,6 +57,21 @@ def main(message):
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message):
     bot.register_next_step_handler(bot.send_message(message.from_user.id, "Привет, введите свой пароль"), get_password)
+
+
+def post():
+
+    post_engine = create_engine(POSTGRE_URI, pool_pre_ping=True)
+    postSession = sessionmaker(bind=post_engine)
+    post_session = postSession()
+
+    urls = BotDatabaseController.get_all_deeplinks(post_session)
+
+    for url in  urls:
+        print(url)
+
+    post_session.commit()
+    post_session.close()
 
 
 def get_password(message):
