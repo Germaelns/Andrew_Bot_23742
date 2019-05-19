@@ -67,8 +67,12 @@ class BotDatabaseController:
         session.query(models.Variable).filter(models.Variable.description == "last_post_time").update({'value': time})
 
     @staticmethod
-    def change_check_timing(minutes):
-        pass
+    def change_post_iter_time(session, minutes: str):
+        session.query(models.Variable).filter(models.Variable.description == "update_iter_time").update({'value': minutes})
+
+    @staticmethod
+    def get_post_iter_time(session):
+        return session.query(models.Variable).filter(models.Variable.description == "update_iter_time").all()[0].value
 
 
 if __name__ == "__main__":

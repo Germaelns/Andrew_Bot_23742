@@ -54,10 +54,7 @@ if __name__ == '__main__':
     session.add(Variable(value="9", description="start_timer"))
     session.add(Variable(value="21", description="end_timer"))
     session.add(Variable(value="0", description="last_post_time"))
-    session.add(Variable(value="754428059:AAFYwBQYdp2k2K1TRQcFCnZIJ3RKmk1pOng", description="telegram_bot_token"))
-    session.add(Variable(value="@trash7289563405", description="chat_id"))
-    session.add(Variable(value="b42f8401b42f8401b42f8401e0b44504ebbb42fb42f8401e8f91a4da1bad7811ea125e6", description="vk_app_token"))
-
+    session.add(Variable(value="0", description="update_iter_time"))
     session.commit()
     session.close()
 

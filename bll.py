@@ -90,21 +90,31 @@ if __name__ == "__main__":
     from sqlalchemy import create_engine
     from config import POSTGRE_URI
 
-    post_engine = create_engine(POSTGRE_URI, pool_pre_ping=True)
-    postSession = sessionmaker(bind=post_engine)
-    post_session = postSession()
+    while True:
 
-    urls = BotDatabaseController.get_all_deeplinks(post_session)
+        post_iter_time = time.time()
 
-    for url in urls:
-        try:
-            post_to_telegram(url[0], url[1], url[2])
-            BotDatabaseController.delete_deeplink(post_session, url[2])
-        except Exception:
-            pass
+        post_engine = create_engine(POSTGRE_URI, pool_pre_ping=True)
+        postSession = sessionmaker(bind=post_engine)
+        post_session = postSession()
 
-    post_session.commit()
-    post_session.close()
+        urls = BotDatabaseController.get_all_deeplinks(post_session)
+
+        for url in urls:
+            try:
+                print("hello")
+                # post_to_telegram(url[0], url[1], url[2])
+                # BotDatabaseController.delete_deeplink(post_session, url[2])
+            except Exception:
+                pass
+
+        post_session.commit()
+        post_session.close()
+
+        # time.sleep(900-(int(time.time())-int(post_iter_time)))
+        # dif = time.time() - post_iter_time
+
+        print(900 - (time.time()-post_iter_time))
 
 
 
