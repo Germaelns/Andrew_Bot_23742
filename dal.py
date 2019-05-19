@@ -32,24 +32,32 @@ class BotDatabaseController:
         return session.query(models.Variable).filter(models.Variable.description == "access_token").all()[0].value
 
     @staticmethod
-    def add_vk_group(group_id: int, session):
-        session.add(models.Group(group_id= group_id))
+    def add_vk_group(session,group_id: int):
+        return session.add(models.Group(group_id= group_id))
 
     @staticmethod
     def get_all_vk_groups(session) -> list:
         return list(map(lambda x: x.group_id, session.query(models.Group).all()))
 
     @staticmethod
-    def delete_vk_group(group_id: int, session):
+    def delete_vk_group(session, group_id: int):
         return session.query(models.Group).filter(models.Group.group_id == group_id).delete()
 
     @staticmethod
-    def change_post_timing(start: str, end: str):
+    def change_post_timing(session, start: str, end: str):
         session.query(models.Variable).filter(models.Variable.description == "start_timer").update({'value': start})
         session.query(models.Variable).filter(models.Variable.description == "end_timer").update({'value': end})
 
     @staticmethod
-    def change_last_post_time(time: str):
+    def get_start_timer(session):
+        return session.query(models.Variable).filter(models.Variable.description == "start_timer").all()[0].value
+
+    @staticmethod
+    def get_end_timer(session):
+        return session.query(models.Variable).filter(models.Variable.description == "end_timer").all()[0].value
+
+    @staticmethod
+    def change_last_post_time(session, time: str):
         session.query(models.Variable).filter(models.Variable.description == "last_post_time").update({'value': time})
 
     @staticmethod
@@ -68,7 +76,7 @@ if __name__ == "__main__":
     Session = sessionmaker(bind=some_engine)
     session = Session()
 
-    # BotDatabaseController.create_new_access_token(session)
+    BotDatabaseController.create_new_access_token(session)
     # BotDatabaseController.get_access_token(session)
     # BotDatabaseController.add_vk_group(2376383, session)
     # BotDatabaseController.delete_vk_group(2376383, session)
@@ -77,7 +85,11 @@ if __name__ == "__main__":
     # BotDatabaseController.get_all_deeplinks(session)
     # BotDatabaseController.delete_deeplink(session, 'url5')
     # BotDatabaseController.get_all_deeplinks(session)
-    session.add(models.Variable(value='0', description="last_post_time"))
-    BotDatabaseController.change_last_post_time("25")
+    # session.add(models.Variable(value='0', description="last_post_time"))
+    # BotDatabaseController.change_last_post_time("25")
+    # BotDatabaseController.get_start_timer(session)
+    # BotDatabaseController.get_end_timer(session)
+    # BotDatabaseController.get_all_deeplinks(session)
+
     session.commit()
     session.close()

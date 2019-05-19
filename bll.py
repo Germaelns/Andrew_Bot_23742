@@ -4,6 +4,7 @@ import telebot
 import vk
 import time
 from config import TELEGRAM_TOKEN, TELEGRAM_CHAT_ID, VK_APP_TOKEN
+from dal import BotDatabaseController
 
 
 def get_url_from_vk_group(vk_groups):
@@ -15,7 +16,7 @@ def get_url_from_vk_group(vk_groups):
     last_post_timing = 0
 
     for group in vk_groups:
-        response = api.wall.get(owner_id=group, v=5.74, count=10)
+        response = api.wall.get(owner_id=group, v=5.74, count=5)
 
         for item in response['items']:
             if last_post_timing < item['date']:
@@ -45,20 +46,22 @@ def get_info_from_url(url):
     return [image, title, url]
 
 
-def create_deeplinks(url):
-    # links_url = "?ulp="
-    #
-    # for link in links:
-    #     links_url += '&ulp=' + link
-    #
-    # headers = {
-    #     "content-type": "application/x-www-form-urlencoded",
-    #     "authorization": "Bearer " + access_token + ""
-    # }
-    #
-    # responce = requests.get('https://api.admitad.com/deeplink/911806/advcampaign/6115/?' + links_url, headers=headers)
-    # print(responce.json()[0])
-    return url
+def create_deeplink(session, url):
+
+    access_token = BotDatabaseController.get_access_token(session)
+
+    print(access_token)
+
+    headers = {
+        "content-type": "application/x-www-form-urlencoded",
+        "authorization": "Bearer " + access_token + ""
+    }
+
+    responce = requests.get('https://api.admitad.com/deeplink/911806/advcampaign/6115/?ulp=' + url, headers=headers)
+
+    print(responce.json())
+
+    return responce.json()[0]
 
 
 def post_to_telegram(image, title, url):
