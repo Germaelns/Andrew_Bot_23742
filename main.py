@@ -2,7 +2,7 @@ import datetime
 
 from bll import *
 
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy import create_engine
 from config import POSTGRE_URI
 from dal import BotDatabaseController
@@ -177,7 +177,7 @@ def post():
         post_iter_time = time.time()
 
         post_engine = create_engine(POSTGRE_URI, pool_pre_ping=True)
-        postSession = sessionmaker(bind=post_engine)
+        postSession = scoped_session(sessionmaker(bind=post_engine))
         post_session = postSession()
 
         urls = BotDatabaseController.get_all_deeplinks(post_session)
