@@ -27,16 +27,16 @@ def get_password(message):
 def interface(message):
     if message.text == '1':
         try:
-            post()
             bot.send_message(message.from_user.id, "Бот начнёт постинг на канал после первого парсинга ВК!")
+            post()
         except Exception as e:
             print(e)
             bot.send_message(message.from_user.id, "Упс, возникла ошибка")
 
     elif message.text == '2':
         try:
-            update()
             bot.send_message(message.from_user.id, "Бот начал парсинг и работает!")
+            update()
         except Exception as e:
             print(e)
             bot.send_message(message.from_user.id, "Упс, возникла ошибка")
