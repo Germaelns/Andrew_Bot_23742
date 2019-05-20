@@ -39,17 +39,21 @@ def interface(message):
         bot.send_message(message.from_user.id, "Бот начал парсинг и работает!")
         update()
 
-
     elif message.text == '3':
         bot.register_next_step_handler(bot.send_message(message.from_user.id, "Введите ID группы вконтакте С МИНУСОМ\n Пример: (-8562496)"), interface_add_group)
+
     elif message.text == '4':
         bot.register_next_step_handler(bot.send_message(message.from_user.id, "Введите ID группы вконтакте С МИНУСОМ\n Пример: (-8562496)"), interface_delete_group)
+
     elif message.text == '5':
         bot.register_next_step_handler(bot.send_message(message.from_user.id, "Введите начало и конец времени через двуеточие\n Например: 9:21"), interface_change_timing)
+
     elif message.text == '6':
         bot.register_next_step_handler(bot.send_message(message.from_user.id, "Введите частоту загрузки постов цифрой в минутах (минимум 30 минут)"), interface_delete_group)
+
     elif message.text == '7':
         bot.send_message(message.from_user.id, "Прощайте, спасибо что обратились!")
+
     elif message.text == '8':
         bot.send_message(message.from_user.id, "Бот прекращает свою работу")
         bot.stop_bot()
@@ -57,9 +61,7 @@ def interface(message):
 
 def interface_add_group(message):
     try:
-        interface_engine = create_engine(POSTGRE_URI, pool_pre_ping=True)
-
-        interfaceSession = sessionmaker(bind=interface_engine)
+        interfaceSession = sessionmaker(bind=some_engine)
         interface_session = interfaceSession()
 
         BotDatabaseController.add_vk_group(interface_session, int(message.text))
@@ -75,9 +77,7 @@ def interface_add_group(message):
 
 def interface_delete_group(message):
     try:
-        interface_engine = create_engine(POSTGRE_URI, pool_pre_ping=True)
-
-        interfaceSession = sessionmaker(bind=interface_engine)
+        interfaceSession = sessionmaker(bind=some_engine)
         interface_session = interfaceSession()
 
         BotDatabaseController.delete_vk_group(interface_session, int(message.text))
@@ -95,9 +95,8 @@ def interface_change_timing(message):
 
     try:
         time = message.text.split(':')
-        interface_engine = create_engine(POSTGRE_URI, pool_pre_ping=True)
 
-        interfaceSession = sessionmaker(bind=interface_engine)
+        interfaceSession = sessionmaker(bind=some_engine)
         interface_session = interfaceSession()
 
         BotDatabaseController.change_post_timing(interface_session, time[0], time[1])
@@ -113,9 +112,8 @@ def interface_change_timing(message):
 
 def interface_change_iter_time(message):
     try:
-        interface_engine = create_engine(POSTGRE_URI, pool_pre_ping=True)
 
-        interfaceSession = sessionmaker(bind=interface_engine)
+        interfaceSession = sessionmaker(bind=some_engine)
         interface_session = interfaceSession()
 
         BotDatabaseController.change_post_iter_time(interface_session, message.text)
@@ -155,10 +153,14 @@ def update():
                 pass
             else:
                 for url in urls:
-                    info = get_info_from_url(url)
-                    if 'aliexpress.com' in info[2]:
-                        deeplink = create_deeplink(session, info[2])
-                        BotDatabaseController.add_deeplink(session, image=info[0][0], title=info[1][0], url=deeplink)
+                    try:
+                        info = get_info_from_url(url)
+                        if 'aliexpress.com' in info[2]:
+                            deeplink = create_deeplink(session, info[2])
+                            BotDatabaseController.add_deeplink(session, image=info[0][0], title=info[1][0],
+                                                               url=deeplink)
+                    except:
+                        pass
                     # post_to_telegram(image=info[0][0], title=info[1][0], url=create_deeplinks(info[2]))
 
         session.commit()
