@@ -36,12 +36,9 @@ def interface(message):
             bot.send_message(message.from_user.id, "Упс, возникла ошибка")
 
     elif message.text == '2':
-        try:
-            bot.send_message(message.from_user.id, "Бот начал парсинг и работает!")
-            update()
-        except Exception as e:
-            print(e)
-            bot.send_message(message.from_user.id, "Упс, возникла ошибка")
+        bot.send_message(message.from_user.id, "Бот начал парсинг и работает!")
+        update()
+
 
     elif message.text == '3':
         bot.register_next_step_handler(bot.send_message(message.from_user.id, "Введите ID группы вконтакте С МИНУСОМ\n Пример: (-8562496)"), interface_add_group)
