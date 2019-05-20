@@ -145,7 +145,7 @@ def update():
         start_time = int(BotDatabaseController.get_start_timer(session))
         end_time = int(BotDatabaseController.get_end_timer(session))
         # sleep_time = float(BotDatabaseController.get_post_iter_time(session))
-        sleep_time = 900
+        sleep_time = 60
 
         urls = list()
         hour = int(str(datetime.datetime.now().time())[:2])
