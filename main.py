@@ -9,6 +9,8 @@ from dal import BotDatabaseController
 
 bot = telebot.TeleBot(TELEGRAM_TOKEN)
 
+some_engine = create_engine(POSTGRE_URI, pool_pre_ping=True)
+
 
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message):
@@ -136,8 +138,6 @@ def update():
 
         update_iter_time = time.time()
 
-        some_engine = create_engine(POSTGRE_URI, pool_pre_ping=True)
-
         Session = sessionmaker(bind=some_engine)
         session = Session()
 
@@ -176,8 +176,8 @@ def post():
 
         post_iter_time = time.time()
 
-        post_engine = create_engine(POSTGRE_URI, pool_pre_ping=True)
-        postSession = sessionmaker(bind=post_engine)
+        # post_engine = create_engine(POSTGRE_URI, pool_pre_ping=True)
+        postSession = sessionmaker(bind=some_engine)
         post_session = postSession()
 
         urls = BotDatabaseController.get_all_deeplinks(post_session)
