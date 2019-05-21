@@ -24,7 +24,7 @@ def get_password(message):
                                                                               "бот\n2) Добавить группу\n3) Удалить "
                                                                               "группу\n4) Изменить время работы\n"
                                                                               "5) Изменить периодичность выхода постов "
-                                                                              "\n6) Выйти"), interface)
+                                                                              "\n6) Отобразить группы\n7) Выйти"), interface)
     elif message.text == "exit":
         bot.send_message(message.from_user.id, "Прощайте, спасибо что обратились!")
     else:
@@ -48,6 +48,23 @@ def interface(message):
         bot.register_next_step_handler(bot.send_message(message.from_user.id, "Выберите частоту загрузки постов: \n1) Каждые 15 мин\n2) Каждые 30 мин\n3) Каждые 45 мин\n4) Каждый час"), interface_change_iter_time)
 
     elif message.text == '6':
+
+        interfaceSession = sessionmaker(bind=some_engine)
+        interface_session = interfaceSession()
+
+        groups = BotDatabaseController.get_all_vk_groups(some_engine)
+
+        info_group = ""
+
+        for group in groups:
+            info_group = info_group + group + "\n"
+
+        interface_session.commit()
+        interface_session.close()
+
+        bot.send_message(message.from_user.id, info_group)
+
+    elif message.text == '7':
         bot.send_message(message.from_user.id, "Прощайте, спасибо что обратились!")
     else:
         bot.send_message(message.from_user.id, "Команда выбрана неверно, прощайте")
@@ -65,7 +82,7 @@ def interface_add_group(message):
 
         bot.send_message(message.from_user.id, "Группа успешно добавлена!")
     except:
-        bot.send_message(message.from_user.id, "Группа уже существует")
+        bot.send_message(message.from_user.id, "Группа уже существует или введены некорректные данные")
 
 
 def interface_delete_group(message):
@@ -86,6 +103,7 @@ def interface_delete_group(message):
 def interface_change_timing(message):
 
     try:
+
         time = message.text.split(':')
 
         interfaceSession = sessionmaker(bind=some_engine)
@@ -97,9 +115,8 @@ def interface_change_timing(message):
         interface_session.close()
 
         bot.send_message(message.from_user.id, "Время успешно изменено!")
-    except Exception as e:
-        print(e)
-        bot.send_message(message.from_user.id, "Упс, возникла ошибка в изменении")
+    except:
+        bot.send_message(message.from_user.id, "Введеные некорректные данные")
 
 
 def interface_change_iter_time(message):
@@ -154,7 +171,7 @@ def start_bot():
                             deeplink = create_deeplink(session, info[2])
                             BotDatabaseController.add_deeplink(session, image=info[0][0], title=post[0],
                                                                url=deeplink)
-                    except Exception as e:
+                    except:
                         pass
 
             session.commit()
