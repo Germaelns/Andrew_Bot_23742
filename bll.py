@@ -29,7 +29,7 @@ def get_url_from_vk_group(session_db, vk_groups):
     session = vk.Session(access_token=VK_APP_TOKEN)
     api = vk.API(session)
 
-    urls = list()
+    posts = list()
 
     last_post_timing = float(BotDatabaseController.get_last_post_time(session_db))
 
@@ -42,7 +42,11 @@ def get_url_from_vk_group(session_db, vk_groups):
                     if item['text'] is not "":
                         try:
                             print(item['text'])
-                            urls.append(re.search("(?P<url>https?://[^\s]+)", item["text"]).group("url"))
+                            url = re.search("(?P<url>https?://[^\s]+)", item["text"]).group("url")
+                            text = item['text'].replace(url, '')
+                            print(url)
+                            print(text)
+                            posts.append([text, url])
                         except:
                             pass
         except:
@@ -50,7 +54,7 @@ def get_url_from_vk_group(session_db, vk_groups):
 
     BotDatabaseController.change_last_post_time(session_db, str(time.time()))
 
-    return urls
+    return posts
 
 
 def get_info_from_url(url):

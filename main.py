@@ -143,21 +143,19 @@ def start_bot():
         end_time = int(BotDatabaseController.get_end_timer(session))
         sleep_time = int(BotDatabaseController.get_post_iter_time(session))
 
-        urls = list()
         hour = int(str(datetime.datetime.now().time())[:2])
 
-        urls = get_url_from_vk_group(session, vk_groups)
-        print(urls)
+        posts = get_url_from_vk_group(session, vk_groups)
 
-        if not urls:
+        if not posts:
             pass
         else:
-            for url in urls:
+            for post in posts:
                 try:
-                    info = get_info_from_url(url)
+                    info = get_info_from_url(post[1])
                     if 'aliexpress.com' in info[2]:
                         deeplink = create_deeplink(session, info[2])
-                        BotDatabaseController.add_deeplink(session, image=info[0][0], title=info[1][0],
+                        BotDatabaseController.add_deeplink(session, image=info[0][0], title=post[0],
                                                            url=deeplink)
                 except Exception as e:
                     pass
