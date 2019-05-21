@@ -57,7 +57,7 @@ def interface(message):
         info_group = ""
 
         for group in groups:
-            info_group = info_group + group + "\n"
+            info_group = info_group + str(group) + "\n"
 
         interface_session.commit()
         interface_session.close()
