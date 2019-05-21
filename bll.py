@@ -33,16 +33,19 @@ def get_url_from_vk_group(session_db, vk_groups):
     last_post_timing = float(BotDatabaseController.get_last_post_time(session_db))
 
     for group in vk_groups:
-        response = api.wall.get(owner_id=group, v=5.74, count=5)
+        try:
+            response = api.wall.get(owner_id=group, v=5.74, count=5)
 
-        for item in response['items']:
-            if last_post_timing < item['date']:
-                if item['text'] is not "":
-                    try:
-                        print(item['text'])
-                        urls.append(re.search("(?P<url>https?://[^\s]+)", item["text"]).group("url"))
-                    except:
-                        pass
+            for item in response['items']:
+                if last_post_timing < item['date']:
+                    if item['text'] is not "":
+                        try:
+                            print(item['text'])
+                            urls.append(re.search("(?P<url>https?://[^\s]+)", item["text"]).group("url"))
+                        except:
+                            pass
+        except:
+            pass
 
     BotDatabaseController.change_last_post_time(session_db, str(time.time()))
 
