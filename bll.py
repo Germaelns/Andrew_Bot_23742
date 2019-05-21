@@ -1,6 +1,7 @@
 import requests
 import re
 import telebot
+from telebot import types
 import vk
 import time
 from config import TELEGRAM_TOKEN, TELEGRAM_CHAT_ID, VK_APP_TOKEN
@@ -88,7 +89,12 @@ def create_deeplink(session, url):
 
 def post_to_telegram(image, title, url):
     bot = telebot.TeleBot(TELEGRAM_TOKEN)
-    bot.send_photo(chat_id=TELEGRAM_CHAT_ID, photo=image, caption="{0}\n\n{1}".format(title, url))
+
+    markup = types.InlineKeyboardMarkup()
+    btn_my_site = types.InlineKeyboardButton(text='Товар', url=url)
+    markup.add(btn_my_site)
+
+    bot.send_photo(chat_id=TELEGRAM_CHAT_ID, photo=image, caption="{0}\n".format(title), reply_markup = markup)
 
 
 if __name__ == "__main__":
