@@ -177,7 +177,7 @@ def start_bot():
                     post_to_telegram(url[0], url[1], url[2])
                     BotDatabaseController.delete_deeplink(post_session, url[2])
                 except Exception:
-                    pass
+                    BotDatabaseController.delete_deeplink(post_session, url[2])
             except:
                 pass
 
