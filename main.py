@@ -191,13 +191,10 @@ def start_bot():
             delete_session = deleteSession()
 
             try:
-                urls = BotDatabaseController.get_all_deeplinks(delete_session)[0]
+                urls = BotDatabaseController.get_all_deeplinks(delete_session)
 
                 for url in urls:
-                    try:
-                        BotDatabaseController.delete_deeplink(delete_session, url[2])
-                    except:
-                        pass
+                    BotDatabaseController.delete_deeplink(delete_session, url[2])
             except:
                 pass
 
