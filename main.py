@@ -52,7 +52,7 @@ def interface(message):
         interfaceSession = sessionmaker(bind=some_engine)
         interface_session = interfaceSession()
 
-        groups = BotDatabaseController.get_all_vk_groups(some_engine)
+        groups = BotDatabaseController.get_all_vk_groups(interface_session)
 
         info_group = ""
 
