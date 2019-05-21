@@ -39,7 +39,7 @@ def get_url_from_vk_group(session_db, vk_groups):
 
             for item in response['items']:
                 if last_post_timing < item['date']:
-                    if item['text'] is not "":
+                    if item['text'] is not "" and item['text'].count('http') == 1:
                         try:
                             url = re.search("(?P<url>https?://[^\s]+)", item["text"]).group("url")
                             text = item['text'].replace(url, '')
