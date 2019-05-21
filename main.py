@@ -50,7 +50,7 @@ def interface(message):
         bot.register_next_step_handler(bot.send_message(message.from_user.id, "Введите начало и конец времени через двуеточие\n Например: 9:21"), interface_change_timing)
 
     elif message.text == '6':
-        bot.register_next_step_handler(bot.send_message(message.from_user.id, "Выберите частоту загрузки постов: \n1) Каждые 15 мин\n2) Каждые 30 мин\n3) Каждые 45 мин\n4) Каждый час"), interface_delete_group)
+        bot.register_next_step_handler(bot.send_message(message.from_user.id, "Выберите частоту загрузки постов: \n1) Каждые 15 мин\n2) Каждые 30 мин\n3) Каждые 45 мин\n4) Каждый час"), interface_change_iter_time())
 
     elif message.text == '7':
         bot.send_message(message.from_user.id, "Прощайте, спасибо что обратились!")
