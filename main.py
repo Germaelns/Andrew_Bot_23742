@@ -37,8 +37,7 @@ def interface(message):
             bot.send_message(message.from_user.id, "Бот начал работу!")
             start_bot()
         except Exception as e:
-            print(e)
-            bot.send_message(message.from_user.id, "Упс, возникла ошибка, бот остановлен")
+            pass
 
     elif message.text == '2':
         bot.register_next_step_handler(bot.send_message(message.from_user.id, "Введите ID группы вконтакте С МИНУСОМ\n Пример: (-8562496)"), interface_add_group)
