@@ -187,16 +187,17 @@ def start_bot():
             print("Done post")
 
         if hour + 3 == 1:
+
             deleteSession = sessionmaker(bind=some_engine)
             delete_session = deleteSession()
 
-            try:
-                urls = BotDatabaseController.get_all_deeplinks(delete_session)
+            urls = BotDatabaseController.get_all_deeplinks(delete_session)
 
-                for url in urls:
+            for url in urls:
+                try:
                     BotDatabaseController.delete_deeplink(delete_session, url[2])
-            except:
-                pass
+                except:
+                    pass
 
             delete_session.commit()
             delete_session.close()
