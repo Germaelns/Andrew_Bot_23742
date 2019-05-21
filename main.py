@@ -144,24 +144,28 @@ def start_bot():
 
         hour = int(str(datetime.datetime.now().time())[:2])
 
-        posts = get_url_from_vk_group(session, vk_groups)
+        try:
 
-        if not posts:
+            posts = get_url_from_vk_group(session, vk_groups)
+
+            if not posts:
+                pass
+            else:
+                for post in posts:
+                    try:
+                        info = get_info_from_url(post[1])
+                        if 'aliexpress.com' in info[2]:
+                            deeplink = create_deeplink(session, info[2])
+                            BotDatabaseController.add_deeplink(session, image=info[0][0], title=post[0],
+                                                               url=deeplink)
+                    except Exception as e:
+                        pass
+
+            session.commit()
+            session.close()
+            print("Done update")
+        except:
             pass
-        else:
-            for post in posts:
-                try:
-                    info = get_info_from_url(post[1])
-                    if 'aliexpress.com' in info[2]:
-                        deeplink = create_deeplink(session, info[2])
-                        BotDatabaseController.add_deeplink(session, image=info[0][0], title=post[0],
-                                                           url=deeplink)
-                except Exception as e:
-                    pass
-
-        session.commit()
-        session.close()
-        print("Done update")
         timer += 1
 
         if start_time <= hour + 3 < end_time and timer >= sleep_time:
@@ -170,12 +174,15 @@ def start_bot():
             postSession = sessionmaker(bind=some_engine)
             post_session = postSession()
 
-            url = BotDatabaseController.get_all_deeplinks(post_session)[0]
-
             try:
-                post_to_telegram(url[0], url[1], url[2])
-                BotDatabaseController.delete_deeplink(post_session, url[2])
-            except Exception:
+                url = BotDatabaseController.get_all_deeplinks(post_session)[0]
+
+                try:
+                    post_to_telegram(url[0], url[1], url[2])
+                    BotDatabaseController.delete_deeplink(post_session, url[2])
+                except Exception:
+                    pass
+            except:
                 pass
 
             post_session.commit()
@@ -187,13 +194,16 @@ def start_bot():
             deleteSession = sessionmaker(bind=some_engine)
             delete_session = deleteSession()
 
-            urls = BotDatabaseController.get_all_deeplinks(delete_session)[0]
+            try:
+                urls = BotDatabaseController.get_all_deeplinks(delete_session)[0]
 
-            for url in urls:
-                try:
-                    BotDatabaseController.delete_deeplink(delete_session, url[2])
-                except:
-                    pass
+                for url in urls:
+                    try:
+                        BotDatabaseController.delete_deeplink(delete_session, url[2])
+                    except:
+                        pass
+            except:
+                pass
 
             delete_session.commit()
             delete_session.close()
