@@ -28,7 +28,7 @@ def get_password(message):
     elif message.text == "exit":
         bot.send_message(message.from_user.id, "Прощайте, спасибо что обратились!")
     else:
-        bot.send_message(message.from_user.id, "Неверный пароль")
+        bot.send_message(message.from_user.id, "Неверный ключ доступа")
 
 
 def interface(message):
@@ -70,7 +70,7 @@ def interface_add_group(message):
 
         bot.send_message(message.from_user.id, "Группа успешно добавлена!")
     except:
-        pass
+        bot.send_message(message.from_user.id, "Группа уже существует")
 
 
 def interface_delete_group(message):
@@ -85,7 +85,7 @@ def interface_delete_group(message):
 
         bot.send_message(message.from_user.id, "Группа успешно удалена!")
     except:
-        pass
+        bot.send_message(message.from_user.id, "Группа не существует в базе")
 
 
 def interface_change_timing(message):
