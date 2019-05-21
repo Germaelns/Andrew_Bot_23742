@@ -197,6 +197,9 @@ def post():
 
 
 def start_bot():
+
+    timer = 0
+
     while True:
 
         post_iter_time = time.time()
@@ -207,8 +210,7 @@ def start_bot():
         vk_groups = BotDatabaseController.get_all_vk_groups(session)
         start_time = int(BotDatabaseController.get_start_timer(session))
         end_time = int(BotDatabaseController.get_end_timer(session))
-        # sleep_time = float(BotDatabaseController.get_post_iter_time(session))
-        sleep_time = 60
+        sleep_time = int(BotDatabaseController.get_post_iter_time(session))
 
         urls = list()
         hour = int(str(datetime.datetime.now().time())[:2])
@@ -232,8 +234,9 @@ def start_bot():
         session.commit()
         session.close()
         print("Done update")
+        timer += 1
 
-        if start_time < hour + 3 < end_time:
+        if start_time < hour + 3 < end_time and timer >= sleep_time:
 
             # post_engine = create_engine(POSTGRE_URI, pool_pre_ping=True)
             postSession = sessionmaker(bind=some_engine)
@@ -250,6 +253,7 @@ def start_bot():
 
             post_session.commit()
             post_session.close()
+            timer = 0
             print("Done post")
 
         time.sleep(60 - (int(time.time()) - int(post_iter_time)))

@@ -72,7 +72,7 @@ class BotDatabaseController:
 
     @staticmethod
     def get_post_iter_time(session):
-        return session.query(models.Variable).filter(models.Variable.description == "update_iter_time").all()[0].value
+        return session.query(models.Variable).filter(models.Variable.description == "post_iter_time").all()[0].value
 
 
 if __name__ == "__main__":
