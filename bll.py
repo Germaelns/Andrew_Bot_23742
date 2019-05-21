@@ -41,7 +41,6 @@ def get_url_from_vk_group(session_db, vk_groups):
                 if last_post_timing < item['date']:
                     if item['text'] is not "":
                         try:
-                            print(item['text'])
                             url = re.search("(?P<url>https?://[^\s]+)", item["text"]).group("url")
                             text = item['text'].replace(url, '')
                             posts.append([text, url])
