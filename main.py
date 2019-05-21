@@ -30,7 +30,8 @@ def interface(message):
     if message.text == '1':
         try:
             bot.send_message(message.from_user.id, "Бот начнёт постинг на канал после первого парсинга ВК!")
-            post()
+            # post()
+            start_bot()
         except Exception as e:
             print(e)
             bot.send_message(message.from_user.id, "Упс, возникла ошибка")
@@ -193,6 +194,65 @@ def post():
         post_session.close()
 
         time.sleep(900 - (int(time.time())-int(post_iter_time)))
+
+
+def start_bot():
+    while True:
+
+        post_iter_time = time.time()
+
+        Session = sessionmaker(bind=some_engine)
+        session = Session()
+
+        vk_groups = BotDatabaseController.get_all_vk_groups(session)
+        start_time = int(BotDatabaseController.get_start_timer(session))
+        end_time = int(BotDatabaseController.get_end_timer(session))
+        # sleep_time = float(BotDatabaseController.get_post_iter_time(session))
+        sleep_time = 60
+
+        urls = list()
+        hour = int(str(datetime.datetime.now().time())[:2])
+
+        urls = get_url_from_vk_group(session, vk_groups)
+        print(urls)
+
+        if not urls:
+            pass
+        else:
+            for url in urls:
+                try:
+                    info = get_info_from_url(url)
+                    if 'aliexpress.com' in info[2]:
+                        deeplink = create_deeplink(session, info[2])
+                        BotDatabaseController.add_deeplink(session, image=info[0][0], title=info[1][0],
+                                                           url=deeplink)
+                except Exception as e:
+                    pass
+
+        session.commit()
+        session.close()
+        print("Done update")
+
+        if start_time + 3 < hour < end_time + 3:
+
+            # post_engine = create_engine(POSTGRE_URI, pool_pre_ping=True)
+            postSession = sessionmaker(bind=some_engine)
+            post_session = postSession()
+
+            urls = BotDatabaseController.get_all_deeplinks(post_session)
+
+            for url in urls:
+                try:
+                    post_to_telegram(url[0], url[1], url[2])
+                    BotDatabaseController.delete_deeplink(post_session, url[2])
+                except Exception:
+                    pass
+
+            post_session.commit()
+            post_session.close()
+            print("Done post")
+
+        time.sleep(60 - (int(time.time()) - int(post_iter_time)))
 
 
 bot.polling()
