@@ -145,24 +145,24 @@ def update():
         urls = list()
         hour = int(str(datetime.datetime.now().time())[:2])
 
-        if start_time < hour < end_time:
+        # if start_time < hour < end_time:
 
-            urls = get_url_from_vk_group(session, vk_groups)
-            print(urls)
+        urls = get_url_from_vk_group(session, vk_groups)
+        print(urls)
 
-            if not urls:
-                pass
-            else:
-                for url in urls:
-                    try:
-                        info = get_info_from_url(url)
-                        if 'aliexpress.com' in info[2]:
-                            deeplink = create_deeplink(session, info[2])
-                            BotDatabaseController.add_deeplink(session, image=info[0][0], title=info[1][0],
-                                                               url=deeplink)
-                    except Exception as e:
-                        pass
-                    # post_to_telegram(image=info[0][0], title=info[1][0], url=create_deeplinks(info[2]))
+        if not urls:
+            pass
+        else:
+            for url in urls:
+                try:
+                    info = get_info_from_url(url)
+                    if 'aliexpress.com' in info[2]:
+                        deeplink = create_deeplink(session, info[2])
+                        BotDatabaseController.add_deeplink(session, image=info[0][0], title=info[1][0],
+                                                           url=deeplink)
+                except Exception as e:
+                    pass
+                # post_to_telegram(image=info[0][0], title=info[1][0], url=create_deeplinks(info[2]))
 
         session.commit()
         session.close()
