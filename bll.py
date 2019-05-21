@@ -38,6 +38,7 @@ def get_url_from_vk_group(session_db, vk_groups):
         for item in response['items']:
             if last_post_timing < item['date']:
                 if item['text'] is not "":
+                    print(item['text'])
                     urls.append(re.search("(?P<url>https?://[^\s]+)", item["text"]).group("url"))
 
     BotDatabaseController.change_last_post_time(session_db, str(time.time()))

@@ -89,7 +89,7 @@ if __name__ == "__main__":
     # BotDatabaseController.get_access_token(session)
     # BotDatabaseController.add_vk_group(2376383, session)
     # BotDatabaseController.delete_vk_group(2376383, session)
-    # BotDatabaseController.get_vk_groups(session)
+    # print(BotDatabaseController.get_all_vk_groups(session))
     # BotDatabaseController.change_post_timing("8", "20")
     # BotDatabaseController.get_all_deeplinks(session)
     # BotDatabaseController.delete_deeplink(session, 'url5')
