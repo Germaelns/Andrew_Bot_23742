@@ -171,19 +171,33 @@ def start_bot():
             postSession = sessionmaker(bind=some_engine)
             post_session = postSession()
 
-            urls = BotDatabaseController.get_all_deeplinks(post_session)
+            url = BotDatabaseController.get_all_deeplinks(post_session)[0]
 
-            for url in urls:
-                try:
-                    post_to_telegram(url[0], url[1], url[2])
-                    BotDatabaseController.delete_deeplink(post_session, url[2])
-                except Exception:
-                    pass
+            try:
+                post_to_telegram(url[0], url[1], url[2])
+                BotDatabaseController.delete_deeplink(post_session, url[2])
+            except Exception:
+                pass
 
             post_session.commit()
             post_session.close()
             timer = 0
             print("Done post")
+
+        if hour + 3 == 1:
+            deleteSession = sessionmaker(bind=some_engine)
+            delete_session = deleteSession()
+
+            urls = BotDatabaseController.get_all_deeplinks(delete_session)[0]
+
+            for url in urls:
+                try:
+                    BotDatabaseController.delete_deeplink(delete_session, url[2])
+                except:
+                    pass
+
+            delete_session.commit()
+            delete_session.close()
 
         time.sleep(900 - (int(time.time()) - int(post_iter_time)))
 

@@ -44,8 +44,6 @@ def get_url_from_vk_group(session_db, vk_groups):
                             print(item['text'])
                             url = re.search("(?P<url>https?://[^\s]+)", item["text"]).group("url")
                             text = item['text'].replace(url, '')
-                            print(url)
-                            print(text)
                             posts.append([text, url])
                         except:
                             pass
