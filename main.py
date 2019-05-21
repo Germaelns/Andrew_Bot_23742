@@ -33,12 +33,8 @@ def get_password(message):
 
 def interface(message):
     if message.text == '1':
-        try:
-            bot.send_message(message.from_user.id, "Бот начал работу!")
-            start_bot()
-        except Exception as e:
-            pass
-
+        bot.send_message(message.from_user.id, "Бот начал работу!")
+        start_bot()
     elif message.text == '2':
         bot.register_next_step_handler(bot.send_message(message.from_user.id, "Введите ID группы вконтакте С МИНУСОМ\n Пример: (-8562496)"), interface_add_group)
 
