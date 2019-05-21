@@ -159,7 +159,8 @@ def update():
                             deeplink = create_deeplink(session, info[2])
                             BotDatabaseController.add_deeplink(session, image=info[0][0], title=info[1][0],
                                                                url=deeplink)
-                    except:
+                    except Exception as e:
+                        print(e)
                         pass
                     # post_to_telegram(image=info[0][0], title=info[1][0], url=create_deeplinks(info[2]))
 
