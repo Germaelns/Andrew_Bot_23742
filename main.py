@@ -11,6 +11,8 @@ bot = telebot.TeleBot(TELEGRAM_TOKEN)
 
 some_engine = create_engine(POSTGRE_URI, pool_pre_ping=True)
 
+bot_status = 0
+
 
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message):
@@ -33,8 +35,14 @@ def get_password(message):
 
 def interface(message):
     if message.text == '1':
-        bot.send_message(message.from_user.id, "Бот начал работу!")
-        start_bot()
+        global bot_status
+        if bot_status == 0:
+            bot.send_message(message.from_user.id, "Бот начал работу!")
+            bot_status = 1
+            start_bot()
+            bot_status = 0
+        else:
+            bot.send_message(message.from_user.id, "Бот уже запущен!")
     elif message.text == '2':
         bot.register_next_step_handler(bot.send_message(message.from_user.id, "Введите ID группы вконтакте С МИНУСОМ\n Пример: (-8562496)"), interface_add_group)
 
