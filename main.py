@@ -233,7 +233,7 @@ def start_bot():
         session.close()
         print("Done update")
 
-        if start_time + 3 < hour < end_time + 3:
+        if start_time < hour + 3 < end_time:
 
             # post_engine = create_engine(POSTGRE_URI, pool_pre_ping=True)
             postSession = sessionmaker(bind=some_engine)
