@@ -95,7 +95,7 @@ def post_to_telegram(image, title, url):
     bot = telebot.TeleBot(TELEGRAM_TOKEN)
 
     markup = types.InlineKeyboardMarkup()
-    btn_my_site = types.InlineKeyboardButton(text='Товар', url=url)
+    btn_my_site = types.InlineKeyboardButton(text='Заказать', url=url)
     markup.add(btn_my_site)
 
     bot.send_photo(chat_id=TELEGRAM_CHAT_ID, photo=image, caption="{0}\n".format(title), reply_markup = markup)

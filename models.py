@@ -49,12 +49,12 @@ if __name__ == '__main__':
     Session = sessionmaker(bind=engine)
     session = Session()
 
-    session.add(Variable(value="1a36c8564ba171614dcf", description="access_token"))
-    session.add(Variable(value="0", description="refresh_token"))
+    session.add(Variable(value="ea7a9c28f100d34d92fc", description="access_token"))
+    session.add(Variable(value="8d881ab9882ad5467a93", description="refresh_token"))
     session.add(Variable(value="9", description="start_timer"))
     session.add(Variable(value="21", description="end_timer"))
     session.add(Variable(value="0", description="last_post_time"))
-    session.add(Variable(value="0", description="update_iter_time"))
+    session.add(Variable(value="0", description="post_iter_time"))
     session.commit()
     session.close()
 
