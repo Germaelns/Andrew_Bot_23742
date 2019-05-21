@@ -212,7 +212,7 @@ def start_bot():
             timer = 0
             print("Done post")
 
-        if hour + 3 == 1:
+        if hour + 3 == 25:
 
             deleteSession = sessionmaker(bind=some_engine)
             delete_session = deleteSession()
