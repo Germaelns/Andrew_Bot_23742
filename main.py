@@ -22,8 +22,8 @@ def get_password(message):
         bot.register_next_step_handler(bot.send_message(message.from_user.id, "Введите цифру в соответствии с "
                                                                               "необходимой операцией:\n1) Запустить "
                                                                               "бот\n2) Добавить группу\n3) Удалить "
-                                                                              "группу\n4) Изменить вермя работы\n"
-                                                                              "5) Изменить время выхода постов "
+                                                                              "группу\n4) Изменить время работы\n"
+                                                                              "5) Изменить периодичность выхода постов "
                                                                               "\n6) Выйти"), interface)
     elif message.text == "exit":
         bot.send_message(message.from_user.id, "Прощайте, спасибо что обратились!")
@@ -185,7 +185,7 @@ def start_bot():
             timer = 0
             print("Done post")
 
-        time.sleep(60 - (int(time.time()) - int(post_iter_time)))
+        time.sleep(900 - (int(time.time()) - int(post_iter_time)))
 
 
 bot.polling()
