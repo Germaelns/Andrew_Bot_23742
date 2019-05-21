@@ -236,6 +236,9 @@ def start_bot():
         print("Done update")
         timer += 1
 
+        print(timer)
+        print(sleep_time)
+
         if start_time < hour + 3 < end_time and timer >= sleep_time:
 
             # post_engine = create_engine(POSTGRE_URI, pool_pre_ping=True)
