@@ -44,7 +44,7 @@ def interface(message):
         else:
             bot.send_message(message.from_user.id, "Бот уже запущен!")
     elif message.text == '2':
-        bot.register_next_step_handler(bot.send_message(message.from_user.id, "Введите ID группы вконтакте С МИНУСОМ\n Пример: (-8562496)"), interface_add_group)
+        bot.register_next_step_handler(bot.send_message(message.from_user.id, "Введите ID группы вконтакте С МИНУСОМ\nПример: (-8562496)\n Либо выберите одну их операций ниже:\n1) Вернуться в меню\n2) Завершить работу "), interface_add_group)
 
     elif message.text == '3':
         bot.register_next_step_handler(bot.send_message(message.from_user.id, "Введите ID группы вконтакте С МИНУСОМ\n Пример: (-8562496)"), interface_delete_group)
@@ -74,8 +74,6 @@ def interface(message):
         interface_session.commit()
         interface_session.close()
 
-
-
     elif message.text == '7':
         bot.send_message(message.from_user.id, "Прощайте, спасибо что обратились!")
     else:
@@ -83,18 +81,30 @@ def interface(message):
 
 
 def interface_add_group(message):
-    try:
-        interfaceSession = sessionmaker(bind=some_engine)
-        interface_session = interfaceSession()
 
-        BotDatabaseController.add_vk_group(interface_session, int(message.text))
+    if message.text == '1':
+        bot.register_next_step_handler(bot.send_message(message.from_user.id, "Введите цифру в соответствии с "
+                                                                              "необходимой операцией:\n1) Запустить "
+                                                                              "бот\n2) Добавить группу\n3) Удалить "
+                                                                              "группу\n4) Изменить время работы\n"
+                                                                              "5) Изменить периодичность выхода постов "
+                                                                              "\n6) Отобразить группы\n7) Выйти"),
+                                       interface)
+    elif message.text == '2':
+        bot.send_message(message.from_user.id, "Прощайте, спасибо что обратились!")
+    else:
+        try:
+            interfaceSession = sessionmaker(bind=some_engine)
+            interface_session = interfaceSession()
 
-        interface_session.commit()
-        interface_session.close()
+            BotDatabaseController.add_vk_group(interface_session, int(message.text))
 
-        bot.send_message(message.from_user.id, "Группа успешно добавлена!")
-    except:
-        bot.send_message(message.from_user.id, "Группа уже существует или введены некорректные данные")
+            interface_session.commit()
+            interface_session.close()
+
+            bot.send_message(message.from_user.id, "Группа успешно добавлена!")
+        except:
+            bot.send_message(message.from_user.id, "Группа уже существует или введены некорректные данные")
 
 
 def interface_delete_group(message):
@@ -149,6 +159,10 @@ def interface_change_iter_time(message):
             bot.send_message(message.from_user.id, "Упс, возникла ошибка в изменении")
     else:
         bot.send_message(message.from_user.id, "Команда выбрана неверно, прощайте")
+
+
+def interface_back():
+    pass
 
 
 def start_bot():
