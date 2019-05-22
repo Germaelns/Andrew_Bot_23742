@@ -47,13 +47,13 @@ def interface(message):
         bot.register_next_step_handler(bot.send_message(message.from_user.id, "Введите ID группы вконтакте С МИНУСОМ\nПример: (-8562496)\n Либо выберите одну их операций ниже:\n1) Вернуться в меню\n2) Завершить работу "), interface_add_group)
 
     elif message.text == '3':
-        bot.register_next_step_handler(bot.send_message(message.from_user.id, "Введите ID группы вконтакте С МИНУСОМ\n Пример: (-8562496)"), interface_delete_group)
+        bot.register_next_step_handler(bot.send_message(message.from_user.id, "Введите ID группы вконтакте С МИНУСОМ\nПример: (-8562496)\n Либо выберите одну их операций ниже:\n1) Вернуться в меню\n2) Завершить работу "), interface_delete_group)
 
     elif message.text == '4':
-        bot.register_next_step_handler(bot.send_message(message.from_user.id, "Введите начало и конец времени работы через двуеточие\n Например: 9:21"), interface_change_timing)
+        bot.register_next_step_handler(bot.send_message(message.from_user.id, "Введите начало и конец времени работы через двуеточие\n Например: 9:21\n Либо выберите одну их операций ниже:\n1) Вернуться в меню\n2) Завершить работу"), interface_change_timing)
 
     elif message.text == '5':
-        bot.register_next_step_handler(bot.send_message(message.from_user.id, "Выберите частоту загрузки постов: \n1) Каждые 15 мин\n2) Каждые 30 мин\n3) Каждые 45 мин\n4) Каждый час"), interface_change_iter_time)
+        bot.register_next_step_handler(bot.send_message(message.from_user.id, "Выберите частоту загрузки постов: \n1) Каждые 15 мин\n2) Каждые 30 мин\n3) Каждые 45 мин\n4) Каждый час\n5) Вернуться в меню \n 6) Завершить работу"), interface_change_iter_time)
 
     elif message.text == '6':
 
@@ -108,37 +108,60 @@ def interface_add_group(message):
 
 
 def interface_delete_group(message):
-    try:
-        interfaceSession = sessionmaker(bind=some_engine)
-        interface_session = interfaceSession()
 
-        BotDatabaseController.delete_vk_group(interface_session, int(message.text))
+    if message.text == '1':
+        bot.register_next_step_handler(bot.send_message(message.from_user.id, "Введите цифру в соответствии с "
+                                                                              "необходимой операцией:\n1) Запустить "
+                                                                              "бот\n2) Добавить группу\n3) Удалить "
+                                                                              "группу\n4) Изменить время работы\n"
+                                                                              "5) Изменить периодичность выхода постов "
+                                                                              "\n6) Отобразить группы\n7) Выйти"),
+                                       interface)
+    elif message.text == '2':
+        bot.send_message(message.from_user.id, "Прощайте, спасибо что обратились!")
+    else:
+        try:
+            interfaceSession = sessionmaker(bind=some_engine)
+            interface_session = interfaceSession()
 
-        interface_session.commit()
-        interface_session.close()
+            BotDatabaseController.delete_vk_group(interface_session, int(message.text))
 
-        bot.send_message(message.from_user.id, "Группа успешно удалена!")
-    except:
-        bot.send_message(message.from_user.id, "Группа не существует в базе")
+            interface_session.commit()
+            interface_session.close()
+
+            bot.send_message(message.from_user.id, "Группа успешно удалена!")
+        except:
+            bot.send_message(message.from_user.id, "Группа не существует в базе")
 
 
 def interface_change_timing(message):
 
-    try:
+    if message.text == '1':
+        bot.register_next_step_handler(bot.send_message(message.from_user.id, "Введите цифру в соответствии с "
+                                                                              "необходимой операцией:\n1) Запустить "
+                                                                              "бот\n2) Добавить группу\n3) Удалить "
+                                                                              "группу\n4) Изменить время работы\n"
+                                                                              "5) Изменить периодичность выхода постов "
+                                                                              "\n6) Отобразить группы\n7) Выйти"),
+                                       interface)
+    elif message.text == '2':
+        bot.send_message(message.from_user.id, "Прощайте, спасибо что обратились!")
+    else:
+        try:
 
-        time = message.text.split(':')
+            time = message.text.split(':')
 
-        interfaceSession = sessionmaker(bind=some_engine)
-        interface_session = interfaceSession()
+            interfaceSession = sessionmaker(bind=some_engine)
+            interface_session = interfaceSession()
 
-        BotDatabaseController.change_post_timing(interface_session, time[0], time[1])
+            BotDatabaseController.change_post_timing(interface_session, time[0], time[1])
 
-        interface_session.commit()
-        interface_session.close()
+            interface_session.commit()
+            interface_session.close()
 
-        bot.send_message(message.from_user.id, "Время успешно изменено!")
-    except:
-        bot.send_message(message.from_user.id, "Введеные некорректные данные")
+            bot.send_message(message.from_user.id, "Время успешно изменено!")
+        except:
+            bot.send_message(message.from_user.id, "Введеные некорректные данные")
 
 
 def interface_change_iter_time(message):
@@ -157,12 +180,18 @@ def interface_change_iter_time(message):
         except Exception as e:
             print(e)
             bot.send_message(message.from_user.id, "Упс, возникла ошибка в изменении")
+    elif message.text == '5':
+        bot.register_next_step_handler(bot.send_message(message.from_user.id, "Введите цифру в соответствии с "
+                                                                              "необходимой операцией:\n1) Запустить "
+                                                                              "бот\n2) Добавить группу\n3) Удалить "
+                                                                              "группу\n4) Изменить время работы\n"
+                                                                              "5) Изменить периодичность выхода постов "
+                                                                              "\n6) Отобразить группы\n7) Выйти"),
+                                       interface)
+    elif message.text == '6':
+        bot.send_message(message.from_user.id, "Прощайте, спасибо что обратились!")
     else:
         bot.send_message(message.from_user.id, "Команда выбрана неверно, прощайте")
-
-
-def interface_back():
-    pass
 
 
 def start_bot():
