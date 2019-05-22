@@ -64,13 +64,17 @@ def interface(message):
 
         info_group = ""
 
-        for group in groups:
-            info_group = info_group + str(group) + "\n"
+        if groups:
+            for group in groups:
+                info_group = info_group + str(group) + "\n"
+            bot.send_message(message.from_user.id, info_group)
+        else:
+            bot.send_message(message.from_user.id, "Нет подключенных групп")
 
         interface_session.commit()
         interface_session.close()
 
-        bot.send_message(message.from_user.id, info_group)
+
 
     elif message.text == '7':
         bot.send_message(message.from_user.id, "Прощайте, спасибо что обратились!")
