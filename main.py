@@ -68,8 +68,22 @@ def interface(message):
             for group in groups:
                 info_group = info_group + str(group) + "\n"
             bot.send_message(message.from_user.id, info_group)
+            bot.register_next_step_handler(bot.send_message(message.from_user.id, "Введите цифру в соответствии с "
+                                                                                  "необходимой операцией:\n1) Запустить "
+                                                                                  "бот\n2) Добавить группу\n3) Удалить "
+                                                                                  "группу\n4) Изменить время работы\n"
+                                                                                  "5) Изменить периодичность выхода постов "
+                                                                                  "\n6) Отобразить группы\n7) Завершить работу"),
+                                           interface)
         else:
             bot.send_message(message.from_user.id, "Нет подключенных групп")
+            bot.register_next_step_handler(bot.send_message(message.from_user.id, "Введите цифру в соответствии с "
+                                                                                  "необходимой операцией:\n1) Запустить "
+                                                                                  "бот\n2) Добавить группу\n3) Удалить "
+                                                                                  "группу\n4) Изменить время работы\n"
+                                                                                  "5) Изменить периодичность выхода постов "
+                                                                                  "\n6) Отобразить группы\n7) Завершить работу"),
+                                           interface)
 
         interface_session.commit()
         interface_session.close()
@@ -88,7 +102,7 @@ def interface_add_group(message):
                                                                               "бот\n2) Добавить группу\n3) Удалить "
                                                                               "группу\n4) Изменить время работы\n"
                                                                               "5) Изменить периодичность выхода постов "
-                                                                              "\n6) Отобразить группы\n7) Выйти"),
+                                                                              "\n6) Отобразить группы\n7) Завершить работу"),
                                        interface)
     elif message.text == '2':
         bot.send_message(message.from_user.id, "Прощайте, спасибо что обратились!")
