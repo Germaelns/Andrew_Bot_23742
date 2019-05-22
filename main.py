@@ -117,8 +117,22 @@ def interface_add_group(message):
             interface_session.close()
 
             bot.send_message(message.from_user.id, "Группа успешно добавлена!")
+            bot.register_next_step_handler(bot.send_message(message.from_user.id, "Введите цифру в соответствии с "
+                                                                                  "необходимой операцией:\n1) Запустить "
+                                                                                  "бот\n2) Добавить группу\n3) Удалить "
+                                                                                  "группу\n4) Изменить время работы\n"
+                                                                                  "5) Изменить периодичность выхода постов "
+                                                                                  "\n6) Отобразить группы\n7) Выйти"),
+                                           interface)
         except:
             bot.send_message(message.from_user.id, "Группа уже существует или введены некорректные данные")
+            bot.register_next_step_handler(bot.send_message(message.from_user.id, "Введите цифру в соответствии с "
+                                                                                  "необходимой операцией:\n1) Запустить "
+                                                                                  "бот\n2) Добавить группу\n3) Удалить "
+                                                                                  "группу\n4) Изменить время работы\n"
+                                                                                  "5) Изменить периодичность выхода постов "
+                                                                                  "\n6) Отобразить группы\n7) Выйти"),
+                                           interface)
 
 
 def interface_delete_group(message):
@@ -144,8 +158,22 @@ def interface_delete_group(message):
             interface_session.close()
 
             bot.send_message(message.from_user.id, "Группа успешно удалена!")
+            bot.register_next_step_handler(bot.send_message(message.from_user.id, "Введите цифру в соответствии с "
+                                                                                  "необходимой операцией:\n1) Запустить "
+                                                                                  "бот\n2) Добавить группу\n3) Удалить "
+                                                                                  "группу\n4) Изменить время работы\n"
+                                                                                  "5) Изменить периодичность выхода постов "
+                                                                                  "\n6) Отобразить группы\n7) Выйти"),
+                                           interface)
         except:
             bot.send_message(message.from_user.id, "Группа не существует в базе")
+            bot.register_next_step_handler(bot.send_message(message.from_user.id, "Введите цифру в соответствии с "
+                                                                                  "необходимой операцией:\n1) Запустить "
+                                                                                  "бот\n2) Добавить группу\n3) Удалить "
+                                                                                  "группу\n4) Изменить время работы\n"
+                                                                                  "5) Изменить периодичность выхода постов "
+                                                                                  "\n6) Отобразить группы\n7) Выйти"),
+                                           interface)
 
 
 def interface_change_timing(message):
@@ -174,8 +202,22 @@ def interface_change_timing(message):
             interface_session.close()
 
             bot.send_message(message.from_user.id, "Время успешно изменено!")
+            bot.register_next_step_handler(bot.send_message(message.from_user.id, "Введите цифру в соответствии с "
+                                                                                  "необходимой операцией:\n1) Запустить "
+                                                                                  "бот\n2) Добавить группу\n3) Удалить "
+                                                                                  "группу\n4) Изменить время работы\n"
+                                                                                  "5) Изменить периодичность выхода постов "
+                                                                                  "\n6) Отобразить группы\n7) Выйти"),
+                                           interface)
         except:
             bot.send_message(message.from_user.id, "Введеные некорректные данные")
+            bot.register_next_step_handler(bot.send_message(message.from_user.id, "Введите цифру в соответствии с "
+                                                                                  "необходимой операцией:\n1) Запустить "
+                                                                                  "бот\n2) Добавить группу\n3) Удалить "
+                                                                                  "группу\n4) Изменить время работы\n"
+                                                                                  "5) Изменить периодичность выхода постов "
+                                                                                  "\n6) Отобразить группы\n7) Выйти"),
+                                           interface)
 
 
 def interface_change_iter_time(message):
@@ -191,9 +233,15 @@ def interface_change_iter_time(message):
             interface_session.close()
 
             bot.send_message(message.from_user.id, "Время выхода постов успешно изменено!")
-        except Exception as e:
-            print(e)
-            bot.send_message(message.from_user.id, "Упс, возникла ошибка в изменении")
+            bot.register_next_step_handler(bot.send_message(message.from_user.id, "Введите цифру в соответствии с "
+                                                                                  "необходимой операцией:\n1) Запустить "
+                                                                                  "бот\n2) Добавить группу\n3) Удалить "
+                                                                                  "группу\n4) Изменить время работы\n"
+                                                                                  "5) Изменить периодичность выхода постов "
+                                                                                  "\n6) Отобразить группы\n7) Выйти"),
+                                           interface)
+        except:
+            pass
     elif message.text == '5':
         bot.register_next_step_handler(bot.send_message(message.from_user.id, "Введите цифру в соответствии с "
                                                                               "необходимой операцией:\n1) Запустить "
