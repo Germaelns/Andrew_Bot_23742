@@ -51,7 +51,7 @@ def interface(message):
         bot.register_next_step_handler(bot.send_message(message.from_user.id, "Введите начало и конец времени работы через двуеточие\n Например: 9:21\n\n Либо выберите одну из операций ниже:\n1) Вернуться в меню\n2) Завершить работу"), interface_change_timing)
 
     elif message.text == '5':
-        bot.register_next_step_handler(bot.send_message(message.from_user.id, "Выберите частоту загрузки постов: \n1) Каждые 15 мин\n2) Каждые 30 мин\n3) Каждые 45 мин\n4) Каждый час\n5) Вернуться в меню \n 6) Завершить работу"), interface_change_iter_time)
+        bot.register_next_step_handler(bot.send_message(message.from_user.id, "Выберите частоту загрузки постов: \n1) Каждые 15 мин\n2) Каждые 30 мин\n3) Каждые 45 мин\n4) Каждый час\n5) Каждые 2 часа\n6) Вернуться в меню \n 7) Завершить работу"), interface_change_iter_time)
 
     elif message.text == '6':
 
@@ -219,13 +219,16 @@ def interface_change_timing(message):
 
 
 def interface_change_iter_time(message):
-    if message.text == '1' or message.text == '2' or message.text == '3' or message.text == '4':
+    if message.text == '1' or message.text == '2' or message.text == '3' or message.text == '4' or message.text == '5':
         try:
 
             interfaceSession = sessionmaker(bind=some_engine)
             interface_session = interfaceSession()
 
-            BotDatabaseController.change_post_iter_time(interface_session, message.text)
+            if message.text == '5':
+                BotDatabaseController.change_post_iter_time(interface_session, '8')
+            else:
+                BotDatabaseController.change_post_iter_time(interface_session, message.text)
 
             interface_session.commit()
             interface_session.close()
@@ -240,7 +243,7 @@ def interface_change_iter_time(message):
                                            interface)
         except:
             pass
-    elif message.text == '5':
+    elif message.text == '6':
         bot.register_next_step_handler(bot.send_message(message.from_user.id, "Введите цифру в соответствии с "
                                                                               "необходимой операцией:\n1) Запустить "
                                                                               "бот\n2) Добавить группу\n3) Удалить "
@@ -248,7 +251,7 @@ def interface_change_iter_time(message):
                                                                               "5) Изменить периодичность выхода постов "
                                                                               "\n6) Отобразить группы\n7) Завершить работу"),
                                        interface)
-    elif message.text == '6':
+    elif message.text == '7':
         bot.send_message(message.from_user.id, "Прощайте, спасибо что обратились!")
     else:
         bot.send_message(message.from_user.id, "Команда выбрана неверно, прощайте")
@@ -270,7 +273,14 @@ def start_bot():
         end_time = int(BotDatabaseController.get_end_timer(session))
         sleep_time = int(BotDatabaseController.get_post_iter_time(session))
 
-        hour = int(str(datetime.datetime.now().time())[:2])
+        hour = int(str(datetime.datetime.now().time())[:2]) + 3
+
+        if hour == 24:
+            hour = 0
+        elif hour == 25:
+            hour = 1
+        elif hour == 26:
+            hour = 2
 
         try:
 
@@ -296,7 +306,7 @@ def start_bot():
             pass
         timer += 1
 
-        if start_time <= hour + 3 < end_time and timer >= sleep_time:
+        if start_time <= hour < end_time and timer >= sleep_time:
 
             # post_engine = create_engine(POSTGRE_URI, pool_pre_ping=True)
             postSession = sessionmaker(bind=some_engine)
@@ -319,7 +329,7 @@ def start_bot():
             timer = 0
             print("Done post")
 
-        if hour + 3 == 25:
+        if hour == 1:
 
             deleteSession = sessionmaker(bind=some_engine)
             delete_session = deleteSession()
