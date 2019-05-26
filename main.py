@@ -275,14 +275,12 @@ def start_bot():
 
         hour = int(str(datetime.datetime.now().time())[:2]) + 3
 
-        if hour == 24:
-            hour = 0
-        elif hour == 25:
-            hour = 1
-        elif hour == 26:
-            hour = 2
-        elif hour == 27:
-            hour = 3
+        # if hour == 24:
+        #     hour = 0
+        # elif hour == 25:
+        #     hour = 1
+        # elif hour == 26:
+        #     hour = 2
 
         try:
 
@@ -315,7 +313,7 @@ def start_bot():
             post_session = postSession()
 
             try:
-                url = BotDatabaseController.get_all_deeplinks(post_session)[0]
+                url = BotDatabaseController.get_all_deeplinks(post_session)[-1]
 
                 if url:
                     try:
