@@ -243,7 +243,7 @@ def interface_change_iter_time(message):
                                            interface)
         except:
             pass
-    elif message.text == '5':
+    elif message.text == '6':
         bot.register_next_step_handler(bot.send_message(message.from_user.id, "Введите цифру в соответствии с "
                                                                               "необходимой операцией:\n1) Запустить "
                                                                               "бот\n2) Добавить группу\n3) Удалить "
@@ -251,7 +251,7 @@ def interface_change_iter_time(message):
                                                                               "5) Изменить периодичность выхода постов "
                                                                               "\n6) Отобразить группы\n7) Завершить работу"),
                                        interface)
-    elif message.text == '6':
+    elif message.text == '7':
         bot.send_message(message.from_user.id, "Прощайте, спасибо что обратились!")
     else:
         bot.send_message(message.from_user.id, "Команда выбрана неверно, прощайте")
