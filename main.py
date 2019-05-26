@@ -313,7 +313,7 @@ def start_bot():
             post_session = postSession()
 
             try:
-                url = BotDatabaseController.get_all_deeplinks(post_session)[0]
+                url = BotDatabaseController.get_all_deeplinks(post_session)[-1]
 
                 if url:
                     try:
