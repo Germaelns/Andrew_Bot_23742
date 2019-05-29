@@ -17,5 +17,5 @@ VK_APP_TOKEN = '6e1674f76e1674f76e1674f7346e7cda9466e166e1674f732f5e3e68ed810311
 # PostgreSQL
 
 # POSTGRE_URI = 'postgres://gwotcibrvpvoje:092cf569b2d7f90ed4240ae3b5bec3c8359a5882b5ae42ce24a99125aa3cf78b@ec2-54-75-230-41.eu-west-1.compute.amazonaws.com:5432/d45lnaal54p8mv'
-POSTGRE_URI = 'postgres://darwiahtogpkww:3c5dbed2645e6d9f9c7504e78eb903b9e4d65cb102e5ea7deaf9f34220912166@ec2-75-101-147-226.compute-1.amazonaws.com:5432/db5qe1keamu04i'
+POSTGRE_URI = 'postgres://atocrwzynmildu:95f07d735d5189c0624fb5c56654ca41a07572e146eda2a67d752031f5f74737@ec2-54-235-86-101.compute-1.amazonaws.com:5432/d87hcpedklai2t'
 
