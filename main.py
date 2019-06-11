@@ -297,13 +297,13 @@ def start_bot():
                             BotDatabaseController.add_deeplink(session, image=info[0][0], title=post[0],
                                                                url=deeplink)
                     except:
-                        pass
+                        print("Failed")
 
             session.commit()
             session.close()
             print("Done update")
         except:
-            pass
+            print("Failed all")
         timer += 1
 
         if start_time <= hour < end_time and timer >= sleep_time:
