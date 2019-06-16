@@ -4,7 +4,12 @@
 #trash-token
 # TELEGRAM_TOKEN = '754428059:AAFYwBQYdp2k2K1TRQcFCnZIJ3RKmk1pOng'
 #post-topsale-token
-TELEGRAM_TOKEN = '845427312:AAHj00GEHI0RVNiYPE4eh6QKXt-9qaJmsHU'
+# TELEGRAM_TOKEN = '845427312:AAHj00GEHI0RVNiYPE4eh6QKXt-9qaJmsHU'
+# interface-topsale-token
+TELEGRAM_TOKEN = '898184530:AAGaqvH6wJU9ldtUac0NCaXBh_1rdhQbYG8'
+
+
+
 #trash-chat
 # TELEGRAM_CHAT_ID = '@trash7289563405'
 #post-topsale-chat
